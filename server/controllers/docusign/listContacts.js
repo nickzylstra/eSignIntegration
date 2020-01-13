@@ -1,12 +1,14 @@
 const docusign = require('docusign-esign');
-// docusign-esign module API does not support retrieving all contacts for account, only single by id
+// following line and much of listContacts code needed because
+// docusign-esign module API does not support retrieving all contacts for account,
+// only single contact by id
 const ContactGetResponse = require('docusign-esign/src/model/ContactGetResponse');
 const dsJwtAuth = require('./dsJwtAuth');
 
 module.exports = async function listContacts(orgId) {
-  // TODO - refactor to use passed orgId to retrieve org specific jsJwtAuth.accessToken from local db,
-  // if token has expired or doesn't exist,
-  // use org specific dsConfig.js data from local db to create new token then store in db
+  // TODO - refactor to use passed orgId to retrieve org specific
+  // jsJwtAuth.accessToken from local db.  If token has expired or doesn't exist,
+  // use org specific dsConfig.js data stored in local db to create new token then store in db
   await dsJwtAuth.checkToken();
   const dsApi = new docusign.ApiClient();
   dsApi.addDefaultHeader('Authorization', `Bearer ${dsJwtAuth.accessToken}`);
