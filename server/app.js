@@ -22,4 +22,15 @@ app.get('/forms', async (req, res) => {
   }
 });
 
+app.get('/signers', async (req, res) => {
+  const { orgId } = req.query;
+  try {
+    const signers = await dsController.listContacts(orgId);
+    res.json(signers);
+  } catch (error) {
+    fancy(error);
+    res.status(500).send('server error getting signers');
+  }
+});
+
 module.exports = app;
