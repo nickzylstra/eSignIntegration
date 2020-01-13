@@ -24,3 +24,4 @@ public/bundle.js
 # Authentication info
 */s3credentials.*
 *.pem
+dsConfig.js
