@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import FormSelect from './components/FormSelect.jsx';
-import SignerSelect from './components/SignerSelect.jsx';
 
 const host = 'http://localhost:3000';
 
@@ -47,8 +46,7 @@ class App extends Component {
     // TODO - start with loading spinner until list is loaded
     return (
       <div>
-        <FormSelect forms={forms} />
-        <SignerSelect signers={signers} />
+        <FormSelect forms={forms} signers={signers} />
       </div>
     );
   }
