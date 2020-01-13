@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import FormSelect from './components/FormSelect.jsx';
 
 const host = 'http://localhost:3000';
 
@@ -9,7 +10,7 @@ class App extends Component {
     const { org } = props;
     this.state = {
       org,
-      templates: [],
+      forms: [],
       signers: [],
     };
   }
@@ -32,7 +33,7 @@ class App extends Component {
 
       const [resForms, resSigners] = await Promise.all(serverReqs);
       this.setState({
-        templates: resForms.data.envelopeTemplates,
+        forms: resForms.data.envelopeTemplates,
         signers: resSigners.data.contacts,
       });
     } catch (error) {
@@ -41,16 +42,12 @@ class App extends Component {
   }
 
   render() {
-    const { templates, signers } = this.state;
+    const { forms, signers } = this.state;
     // TODO - start with loading spinner until list is loaded
     // TODO - create separate form select component
     return (
       <div>
-        {templates.map(({ name, templateId }) => (
-          <div key={templateId}>
-            {name}
-          </div>
-        ))}
+        <FormSelect forms={forms} />
       </div>
     );
   }

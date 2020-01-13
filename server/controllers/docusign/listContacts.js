@@ -1,6 +1,6 @@
 const docusign = require('docusign-esign');
 // following line and much of listContacts code needed because
-// docusign-esign module API does not support retrieving all contacts for account,
+// docusign-esign node SDK does not support retrieving all contacts for account,
 // only single contact by id
 const ContactGetResponse = require('docusign-esign/src/model/ContactGetResponse');
 const dsJwtAuth = require('./dsJwtAuth');
