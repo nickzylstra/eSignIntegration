@@ -17,7 +17,7 @@ module.exports = DsJwtAuth; // SET EXPORTS for the module.
 const moment = require('moment');
 // const path = require('path');
 const docusign = require('docusign-esign');
-const dsConfig = require('../../dsConfig.js').config;
+const dsConfig = require('../../../dsConfig.js').config;
 
 // private constants and globals
 const tokenReplaceMin = 10; // The accessToken must expire at least this number of
