@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { template } from '@babel/core';
 
 const host = 'http://localhost:3000';
 
@@ -33,9 +34,15 @@ class App extends Component {
 
   render() {
     const { templates, signers } = this.state;
+    // TODO - start with loading spinner until list is loaded
+    // TODO - create separate list component
     return (
       <div>
-        hi
+        {templates.map(({ name, templateId }) => (
+          <div key={templateId}>
+            {name}
+          </div>
+        ))}
       </div>
     );
   }
