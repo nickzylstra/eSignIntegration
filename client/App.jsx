@@ -16,16 +16,25 @@ class App extends Component {
 
   async componentDidMount() {
     const { org } = this.state;
+    const { orgId } = org;
     try {
-      const res = await axios({
+      const serverReqs = [];
+      serverReqs.push(axios({
         method: 'GET',
         url: `${host}/forms`,
-        params: {
-          orgId: org.orgId,
-        },
+        params: { orgId },
+      }));
+      serverReqs.push(axios({
+        method: 'GET',
+        url: `${host}/signers`,
+        params: { orgId },
+      }));
+
+      const [resForms, resSigners] = await Promise.all(serverReqs);
+      this.setState({
+        templates: resForms.data.envelopeTemplates,
+        signers: resSigners.data.contacts,
       });
-      // TODO - request available signers through server Users>Contacts DS API
-      this.setState({ templates: res.data.envelopeTemplates });
     } catch (error) {
       console.log(error);
     }

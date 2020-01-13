@@ -3,7 +3,7 @@ const docusign = require('docusign-esign');
 const ContactGetResponse = require('docusign-esign/src/model/ContactGetResponse');
 const dsJwtAuth = require('./dsJwtAuth');
 
-module.exports = async function listTemplates(orgId) {
+module.exports = async function listContacts(orgId) {
   // TODO - refactor to use passed orgId to retrieve org specific jsJwtAuth.accessToken from local db,
   // if token has expired or doesn't exist,
   // use org specific dsConfig.js data from local db to create new token then store in db
