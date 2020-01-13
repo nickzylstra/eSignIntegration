@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { template } from '@babel/core';
 
 const host = 'http://localhost:3000';
 
@@ -25,7 +24,7 @@ class App extends Component {
           orgId: org.orgId,
         },
       });
-      // TODO - get signers
+      // TODO - request available signers through server Users>Contacts DS API
       this.setState({ templates: res.data.envelopeTemplates });
     } catch (error) {
       console.log(error);
@@ -35,7 +34,7 @@ class App extends Component {
   render() {
     const { templates, signers } = this.state;
     // TODO - start with loading spinner until list is loaded
-    // TODO - create separate list component
+    // TODO - create separate form select component
     return (
       <div>
         {templates.map(({ name, templateId }) => (
