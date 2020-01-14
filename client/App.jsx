@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Route,
-} from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import FormSelect from './components/FormSelect.jsx';
 
@@ -17,6 +15,9 @@ class App extends Component {
       signers: [],
       isLoading: true,
     };
+
+    this.handleFormSelect = this.handleFormSelect.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -47,14 +48,13 @@ class App extends Component {
 
   handleFormSelect(formId, signerId) {
     // TODO - switch to view to add form data
-
+    this.props.history.push('/edit');
   }
 
   handleFormSubmit() {
     // TODO - submit populated form for signature
   }
 
-  // views: ['loading', 'select', 'edit', 'review', 'finish']
   render() {
     const { isLoading, forms, signers } = this.state;
     return (
@@ -90,4 +90,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

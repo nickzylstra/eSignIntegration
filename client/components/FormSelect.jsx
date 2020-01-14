@@ -3,26 +3,18 @@ import { Redirect } from 'react-router-dom';
 
 const FormSelect = (props) => {
   const {
-    forms, signers, handleFormSelect, nextRoute,
+    forms, signers, handleFormSelect,
   } = props;
 
-  const [showNextRoute, setShowNextRoute] = useState(false);
   const defaultFormId = '--- please select form ---';
   const [formId, setFormId] = useState(defaultFormId);
   const defaultSignerId = '--- please select signer ---';
   const [signerId, setSignerId] = useState(defaultSignerId);
 
-  if (showNextRoute) {
-    return (
-      <Redirect to={nextRoute} />
-    );
-  }
-
   return (
     <form onSubmit={(e) => {
       e.preventDefault();
       handleFormSelect(formId, signerId);
-      setShowNextRoute(true);
     }}
     >
       <select
