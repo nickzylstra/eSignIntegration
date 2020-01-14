@@ -55,7 +55,7 @@ app.get('/signers', async (req, res) => {
 });
 
 app.post('/form-status', async (req, res) => {
-  console.log(req.body);
+  fancy(req.body);
   // TODO - update form record at Welkin with completed status
   res.end();
 });
