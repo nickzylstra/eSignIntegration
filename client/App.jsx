@@ -49,16 +49,20 @@ class App extends Component {
     }
   }
 
-  handleFormSelect(formId, signerId) {
+  handleRouteChange(route) {
     const { history } = this.props;
+    // TODO - does this cause double render when used in setState cb?
+    history.push(route);
+  }
+
+  handleFormSelect(formId, signerId) {
     const { signers } = this.state;
 
     const signer = signers.find(({ contactId }) => contactId === signerId);
     this.setState({
       formId, signer,
     }, () => {
-      // TODO - does this cause double render?  could next line be moved out of cb?
-      history.push('/edit');
+      this.handleRouteChange('/edit');
     });
   }
 
@@ -81,11 +85,6 @@ class App extends Component {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  handleRouteChange(route) {
-    const { history } = this.props;
-    history.push(route);
   }
 
   render() {
