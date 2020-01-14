@@ -15,12 +15,11 @@ class App extends Component {
       signers: [],
       isLoading: true,
       formId: '',
-      signerId: '',
-      signerName: '',
-      signerEmail: '',
+      signer: {},
     };
 
     this.handleFormSelect = this.handleFormSelect.bind(this);
+    this.handleRouteChange = this.handleRouteChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
@@ -55,34 +54,38 @@ class App extends Component {
     const { signers } = this.state;
 
     const signer = signers.find(({ contactId }) => contactId === signerId);
-    const { name, emails } = signer;
     this.setState({
-      formId, signerId, signerName: name, signerEmail: emails[0],
+      formId, signer,
     }, () => {
       // TODO - does this cause double render?  could next line be moved out of cb?
       history.push('/edit');
-      // TODO - remove next line and add edit actual route
-      // this.handleFormSubmit();
     });
   }
 
   async handleFormSubmit() {
-    // TODO - submit populated form for signature
-    const { history } = this.props;
-    const { formId, signerId } = this.state;
+    const { formId, signer } = this.state;
+    const { name, emails } = signer;
     try {
       const res = await axios({
         method: 'POST',
         url: `${host}/forms`,
         data: {
           formId,
-          signerId,
+          signerName: name,
+          signerEmail: emails[0],
+          options: {},
         },
       });
-      history.push('/finish');
+      console.log(res);
+      this.handleRouteChange('/finish');
     } catch (error) {
       console.log(error);
     }
+  }
+
+  handleRouteChange(route) {
+    const { history } = this.props;
+    history.push(route);
   }
 
   render() {
@@ -107,12 +110,21 @@ class App extends Component {
         </Route>
         <Route path="/edit">
           edit
+          <button type="button" onClick={() => this.handleRouteChange('/review')}>
+            Review form
+          </button>
         </Route>
         <Route path="/review">
           review
+          <button type="button" onClick={this.handleFormSubmit}>
+            Send for form signature
+          </button>
         </Route>
         <Route path="/finish">
-          Referral form submitted for signature!
+          Referral form sent for signature!
+          <button type="button" onClick={() => this.handleRouteChange('/')}>
+            Start another form
+          </button>
         </Route>
       </div>
     );

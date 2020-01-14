@@ -1,11 +1,13 @@
 const express = require('express');
 const path = require('path');
+const bodyparser = require('body-parser');
 const compression = require('compression');
 const fancy = require('fancy-log');
 const dsController = require('./controllers/docusign/index');
 
 
 const app = express();
+app.use(bodyparser({ extended: true }));
 app.use(compression());
 
 
@@ -19,6 +21,22 @@ app.get('/forms', async (req, res) => {
   } catch (error) {
     fancy(error);
     res.status(500).send('server error getting forms');
+  }
+});
+
+app.post('/forms', async (req, res) => {
+  const {
+    formId,
+    signerName,
+    signerEmail,
+    options,
+  } = req.body;
+  try {
+    const dsRes = await dsController.sendEnvelope(formId, signerName, signerEmail, options);
+    res.status(201).json(dsRes);
+  } catch (error) {
+    fancy(error);
+    res.status(500).send('server error submitting form');
   }
 });
 
