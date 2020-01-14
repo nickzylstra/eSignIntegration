@@ -30,8 +30,8 @@ module.exports = async function sendEnvelope(formId, signerName, signerEmail, fo
     templateRoles: templateRolesList,
     eventNotification: {
       url: `${process.env.NODE_HOST}/form-status`,
-      loggingEnabled: true,
-      envelopeEvent: 'Completed',
+      loggingEnabled: 'true',
+      envelopeEvent: ['Completed'],
     },
   };
 
