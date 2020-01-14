@@ -116,7 +116,7 @@ class App extends Component {
         <Route path="/review">
           review
           <button type="button" onClick={this.handleFormSubmit}>
-            Send for form signature
+            Send form
           </button>
         </Route>
         <Route path="/finish">

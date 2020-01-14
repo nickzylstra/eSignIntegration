@@ -50,7 +50,7 @@ const FormSelect = (props) => {
 
       <br />
       <br />
-      <input type="submit" value="Edit form before submitting for signature" />
+      <input type="submit" value="Edit form" />
     </form>
   );
 };
