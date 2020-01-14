@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Route, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import FormSelect from './components/FormSelect.jsx';
+import FormEdit from './components/FormEdit.jsx';
 
 const host = 'http://localhost:3000';
 
@@ -12,7 +14,16 @@ class App extends Component {
       org,
       forms: [],
       signers: [],
+      isLoading: true,
+      formId: '',
+      signer: {},
+      formFieldsEntries: [],
     };
+
+    this.handleRouteChange = this.handleRouteChange.bind(this);
+    this.handleFormSelect = this.handleFormSelect.bind(this);
+    this.handleFormEdit = this.handleFormEdit.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -35,21 +46,96 @@ class App extends Component {
       this.setState({
         forms: resForms.data.envelopeTemplates,
         signers: resSigners.data.contacts,
+      }, this.setState({ isLoading: false }));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  handleRouteChange(route) {
+    const { history } = this.props;
+    // TODO - does this cause double render when used in setState cb?
+    history.push(route);
+  }
+
+  handleFormSelect(formId, signerId) {
+    const { signers } = this.state;
+
+    const signer = signers.find(({ contactId }) => contactId === signerId);
+    this.setState({
+      formId, signer,
+    }, () => {
+      this.handleRouteChange('/edit');
+    });
+  }
+
+  handleFormEdit(formFieldsEntries) {
+    this.setState({ formFieldsEntries }, () => {
+      this.handleRouteChange('/review');
+    });
+  }
+
+  async handleFormSubmit() {
+    const { formId, signer, formFieldsEntries } = this.state;
+    const { name, emails } = signer;
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: `${host}/forms`,
+        data: {
+          formId,
+          signerName: name,
+          signerEmail: emails[0],
+          formFieldsEntries,
+        },
       });
+      console.log(res);
+      this.handleRouteChange('/finish');
     } catch (error) {
       console.log(error);
     }
   }
 
   render() {
-    const { forms, signers } = this.state;
-    // TODO - start with loading spinner until list is loaded
+    const { isLoading, forms, signers } = this.state;
     return (
       <div>
-        <FormSelect forms={forms} signers={signers} />
+        <h1>Referral Form Flow</h1>
+        <Route exact path="/">
+          {isLoading
+            ? (
+              <div>
+                loading forms and signers...
+              </div>
+            )
+            : (
+              <FormSelect
+                forms={forms}
+                signers={signers}
+                handleFormSelect={this.handleFormSelect}
+              />
+            )}
+        </Route>
+        <Route path="/edit">
+          <FormEdit
+            handleFormEdit={this.handleFormEdit}
+          />
+        </Route>
+        <Route path="/review">
+          review
+          <button type="button" onClick={this.handleFormSubmit}>
+            Send form
+          </button>
+        </Route>
+        <Route path="/finish">
+          Referral form sent for signature!
+          <button type="button" onClick={() => this.handleRouteChange('/')}>
+            Start another form
+          </button>
+        </Route>
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

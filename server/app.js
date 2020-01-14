@@ -1,11 +1,13 @@
 const express = require('express');
 const path = require('path');
+const bodyparser = require('body-parser');
 const compression = require('compression');
 const fancy = require('fancy-log');
 const dsController = require('./controllers/docusign/index');
 
 
 const app = express();
+app.use(bodyparser.json({ extended: true }));
 app.use(compression());
 
 
@@ -22,6 +24,23 @@ app.get('/forms', async (req, res) => {
   }
 });
 
+app.post('/forms', async (req, res) => {
+  const {
+    formId,
+    signerName,
+    signerEmail,
+    formFieldsEntries,
+  } = req.body;
+  try {
+    const dsRes = await dsController.sendEnvelope(formId, signerName, signerEmail, formFieldsEntries);
+    // TODO - post form record at Welkin
+    res.status(201).json(dsRes);
+  } catch (error) {
+    fancy(error);
+    res.status(500).send('server error submitting form');
+  }
+});
+
 app.get('/signers', async (req, res) => {
   const { orgId } = req.query;
   try {
@@ -31,6 +50,12 @@ app.get('/signers', async (req, res) => {
     fancy(error);
     res.status(500).send('server error getting signers');
   }
+});
+
+app.post('/form-status', async (req, res) => {
+  console.log(req.body);
+  // TODO - update form record at Welkin with completed status
+  res.end();
 });
 
 module.exports = app;
