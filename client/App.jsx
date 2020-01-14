@@ -14,6 +14,10 @@ class App extends Component {
       forms: [],
       signers: [],
       isLoading: true,
+      formId: '',
+      signerId: '',
+      signerName: '',
+      signerEmail: '',
     };
 
     this.handleFormSelect = this.handleFormSelect.bind(this);
@@ -47,12 +51,38 @@ class App extends Component {
   }
 
   handleFormSelect(formId, signerId) {
-    // TODO - switch to view to add form data
-    this.props.history.push('/edit');
+    const { history } = this.props;
+    const { signers } = this.state;
+
+    const signer = signers.find(({ contactId }) => contactId === signerId);
+    const { name, emails } = signer;
+    this.setState({
+      formId, signerId, signerName: name, signerEmail: emails[0],
+    }, () => {
+      // TODO - does this cause double render?  could next line be moved out of cb?
+      history.push('/edit');
+      // TODO - remove next line and add edit actual route
+      // this.handleFormSubmit();
+    });
   }
 
-  handleFormSubmit() {
+  async handleFormSubmit() {
     // TODO - submit populated form for signature
+    const { history } = this.props;
+    const { formId, signerId } = this.state;
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: `${host}/forms`,
+        data: {
+          formId,
+          signerId,
+        },
+      });
+      history.push('/finish');
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
@@ -82,7 +112,7 @@ class App extends Component {
           review
         </Route>
         <Route path="/finish">
-          Referall form submitted for signature!
+          Referral form submitted for signature!
         </Route>
       </div>
     );
