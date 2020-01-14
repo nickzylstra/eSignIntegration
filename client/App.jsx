@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import {
+  Route,
+} from 'react-router-dom';
 import axios from 'axios';
 import FormSelect from './components/FormSelect.jsx';
 
@@ -12,6 +15,7 @@ class App extends Component {
       org,
       forms: [],
       signers: [],
+      isLoading: true,
     };
   }
 
@@ -35,18 +39,52 @@ class App extends Component {
       this.setState({
         forms: resForms.data.envelopeTemplates,
         signers: resSigners.data.contacts,
-      });
+      }, this.setState({ isLoading: false }));
     } catch (error) {
       console.log(error);
     }
   }
 
+  handleFormSelect(formId, signerId) {
+    // TODO - switch to view to add form data
+
+  }
+
+  handleFormSubmit() {
+    // TODO - submit populated form for signature
+  }
+
+  // views: ['loading', 'select', 'edit', 'review', 'finish']
   render() {
-    const { forms, signers } = this.state;
-    // TODO - start with loading spinner until list is loaded
+    const { isLoading, forms, signers } = this.state;
     return (
       <div>
-        <FormSelect forms={forms} signers={signers} />
+        <h1>Referral Form Flow</h1>
+        <Route exact path="/">
+          {isLoading
+            ? (
+              <div>
+                loading forms and signers...
+              </div>
+            )
+            : (
+              <FormSelect
+                nextRoute="/edit"
+                forms={forms}
+                signers={signers}
+                handleFormSelect={this.handleFormSelect}
+              />
+            )}
+        </Route>
+        <Route path="/edit">
+          edit
+        </Route>
+        <Route path="/review">
+          review
+        </Route>
+        <Route path="/finish">
+          Referall form submitted for signature!
+        </Route>
       </div>
     );
   }

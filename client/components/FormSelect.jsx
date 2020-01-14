@@ -1,21 +1,36 @@
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 
 const FormSelect = (props) => {
-  const { forms, signers } = props;
+  const {
+    forms, signers, handleFormSelect, nextRoute,
+  } = props;
 
-  const defaultFormVal = '--- please select form ---';
-  const defaultSignerVal = '--- please select signer ---';
-  const [formVal, setFormVal] = useState(defaultFormVal);
-  const [signersVal, setSignersVal] = useState(defaultSignerVal);
+  const [showNextRoute, setShowNextRoute] = useState(false);
+  const defaultFormId = '--- please select form ---';
+  const [formId, setFormId] = useState(defaultFormId);
+  const defaultSignerId = '--- please select signer ---';
+  const [signerId, setSignerId] = useState(defaultSignerId);
+
+  if (showNextRoute) {
+    return (
+      <Redirect to={nextRoute} />
+    );
+  }
 
   return (
-    <form>
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      handleFormSelect(formId, signerId);
+      setShowNextRoute(true);
+    }}
+    >
       <select
         name="form"
-        value={formVal}
-        onChange={({ target }) => setFormVal(target.value)}
+        value={formId}
+        onChange={(e) => setFormId(e.target.value)}
       >
-        <option value={defaultFormVal} disabled>{defaultFormVal}</option>
+        <option value={defaultFormId} disabled>{defaultFormId}</option>
         {forms.map(({ name, templateId }) => (
           <option key={templateId} value={templateId}>{name}</option>
         ))}
@@ -25,10 +40,10 @@ const FormSelect = (props) => {
 
       <select
         name="signer"
-        value={signersVal}
-        onChange={({ target }) => setSignersVal(target.value)}
+        value={signerId}
+        onChange={(e) => setSignerId(e.target.value)}
       >
-        <option value={defaultSignerVal} disabled>{defaultSignerVal}</option>
+        <option value={defaultSignerId} disabled>{defaultSignerId}</option>
         {signers.map(({
           name, contactId, emails, organization,
         }) => (
@@ -41,6 +56,10 @@ const FormSelect = (props) => {
           </option>
         ))}
       </select>
+
+      <br />
+      <br />
+      <input type="submit" value="Edit form before submitting for signature" />
     </form>
   );
 };
