@@ -33,6 +33,7 @@ app.post('/forms', async (req, res) => {
   } = req.body;
   try {
     const dsRes = await dsController.sendEnvelope(formId, signerName, signerEmail, formFieldsEntries);
+    // TODO - post form record at Welkin
     res.status(201).json(dsRes);
   } catch (error) {
     fancy(error);
@@ -49,6 +50,12 @@ app.get('/signers', async (req, res) => {
     fancy(error);
     res.status(500).send('server error getting signers');
   }
+});
+
+app.post('/form-status', async (req, res) => {
+  console.log(req.body);
+  // TODO - update form record at Welkin with completed status
+  res.end();
 });
 
 module.exports = app;

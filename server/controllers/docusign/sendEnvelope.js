@@ -28,6 +28,11 @@ module.exports = async function sendEnvelope(formId, signerName, signerEmail, fo
     status: 'sent',
     templateId: formId,
     templateRoles: templateRolesList,
+    eventNotification: {
+      url: `${process.env.HOST}/form-status`,
+      loggingEnabled: true,
+      envelopeEvent: 'Completed',
+    },
   };
 
   return envelopesApi.createEnvelope(dsJwtAuth.accountId, { envelopeDefinition });
