@@ -5,7 +5,7 @@ import FormSelect from './components/FormSelect.jsx';
 import FormEdit from './components/FormEdit.jsx';
 
 const localhost = 'http://localhost:3000';
-const aws = 'http://esigndemo.nickzylstra.com/';
+const aws = 'https://esigndemo.nickzylstra.com/';
 const { origin } = window.location;
 const host = (origin && !origin.includes('localhost')) ? aws : localhost;
 if (host === localhost) {
