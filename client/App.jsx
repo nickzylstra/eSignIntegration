@@ -69,7 +69,6 @@ class App extends Component {
             )
             : (
               <FormSelect
-                nextRoute="/edit"
                 forms={forms}
                 signers={signers}
                 handleFormSelect={this.handleFormSelect}
