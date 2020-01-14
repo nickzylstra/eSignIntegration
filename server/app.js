@@ -3,10 +3,12 @@ const path = require('path');
 const bodyparser = require('body-parser');
 const compression = require('compression');
 const fancy = require('fancy-log');
+const cors = require('cors');
 const dsController = require('./controllers/docusign/index');
 
 
 const app = express();
+app.use(cors());
 app.use(bodyparser.json({ extended: true }));
 app.use(compression());
 
