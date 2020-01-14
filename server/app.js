@@ -56,7 +56,7 @@ app.get('/signers', async (req, res) => {
 });
 
 app.post('/form-status', xmlparser(), async (req, res) => {
-  fancy(req.body);
+  fancy('Docusign envelope status update:', req.body);
   // TODO - update form record at Welkin with completed status
   res.end();
 });
