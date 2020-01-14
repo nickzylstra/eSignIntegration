@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import FormSelect from './components/FormSelect.jsx';
+import FormEdit from './components/FormEdit.jsx';
 
 const host = 'http://localhost:3000';
 
@@ -16,10 +17,12 @@ class App extends Component {
       isLoading: true,
       formId: '',
       signer: {},
+      formFieldsEntries: [],
     };
 
-    this.handleFormSelect = this.handleFormSelect.bind(this);
     this.handleRouteChange = this.handleRouteChange.bind(this);
+    this.handleFormSelect = this.handleFormSelect.bind(this);
+    this.handleFormEdit = this.handleFormEdit.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
@@ -66,8 +69,14 @@ class App extends Component {
     });
   }
 
+  handleFormEdit(formFieldsEntries) {
+    this.setState({ formFieldsEntries }, () => {
+      this.handleRouteChange('/review');
+    });
+  }
+
   async handleFormSubmit() {
-    const { formId, signer } = this.state;
+    const { formId, signer, formFieldsEntries } = this.state;
     const { name, emails } = signer;
     try {
       const res = await axios({
@@ -77,7 +86,7 @@ class App extends Component {
           formId,
           signerName: name,
           signerEmail: emails[0],
-          options: {},
+          formFieldsEntries,
         },
       });
       console.log(res);
@@ -108,10 +117,9 @@ class App extends Component {
             )}
         </Route>
         <Route path="/edit">
-          edit
-          <button type="button" onClick={() => this.handleRouteChange('/review')}>
-            Review form
-          </button>
+          <FormEdit
+            handleFormEdit={this.handleFormEdit}
+          />
         </Route>
         <Route path="/review">
           review
