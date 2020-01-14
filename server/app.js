@@ -7,7 +7,7 @@ const dsController = require('./controllers/docusign/index');
 
 
 const app = express();
-app.use(bodyparser({ extended: true }));
+app.use(bodyparser.json({ extended: true }));
 app.use(compression());
 
 
@@ -29,10 +29,10 @@ app.post('/forms', async (req, res) => {
     formId,
     signerName,
     signerEmail,
-    options,
+    formFieldsEntries,
   } = req.body;
   try {
-    const dsRes = await dsController.sendEnvelope(formId, signerName, signerEmail, options);
+    const dsRes = await dsController.sendEnvelope(formId, signerName, signerEmail, formFieldsEntries);
     res.status(201).json(dsRes);
   } catch (error) {
     fancy(error);
