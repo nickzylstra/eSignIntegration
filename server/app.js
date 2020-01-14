@@ -4,6 +4,7 @@ const bodyparser = require('body-parser');
 const compression = require('compression');
 const fancy = require('fancy-log');
 const cors = require('cors');
+const xmlparser = require('express-xml-bodyparser');
 const dsController = require('./controllers/docusign/index');
 
 
@@ -54,7 +55,7 @@ app.get('/signers', async (req, res) => {
   }
 });
 
-app.post('/form-status', async (req, res) => {
+app.post('/form-status', xmlparser(), async (req, res) => {
   fancy(req.body);
   // TODO - update form record at Welkin with completed status
   res.end();
