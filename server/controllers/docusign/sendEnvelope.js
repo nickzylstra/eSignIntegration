@@ -28,6 +28,7 @@ module.exports = async function sendEnvelope(formId, signerName, signerEmail, fo
     status: 'sent',
     templateId: formId,
     templateRoles: templateRolesList,
+    // TODO - this logic below is not working
     eventNotification: {
       url: `${process.env.NODE_HOST}/form-status`,
       loggingEnabled: 'true',

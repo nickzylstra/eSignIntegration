@@ -128,13 +128,15 @@ class App extends Component {
           />
         </Route>
         <Route path="/review">
-          review
+          Review
+          <br />
           <button type="button" onClick={this.handleFormSubmit}>
             Send form
           </button>
         </Route>
         <Route path="/finish">
           Referral form sent for signature!
+          <br />
           <button type="button" onClick={() => this.handleRouteChange('/')}>
             Start another form
           </button>
