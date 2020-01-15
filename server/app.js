@@ -14,6 +14,7 @@ app.use(bodyparser.json({ extended: true }));
 app.use(compression());
 
 
+// TODO - add client/server auth
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
 
 app.get('/forms', async (req, res) => {
