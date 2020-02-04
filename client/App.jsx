@@ -36,17 +36,19 @@ class App extends Component {
     const { org } = this.state;
     const { orgId } = org;
     try {
-      const serverReqs = [];
-      serverReqs.push(axios({
-        method: 'GET',
-        url: `${host}/forms`,
-        params: { orgId },
-      }));
-      serverReqs.push(axios({
-        method: 'GET',
-        url: `${host}/signers`,
-        params: { orgId },
-      }));
+      // TODO - add client/server auth
+      const serverReqs = [
+        axios({
+          method: 'GET',
+          url: `${host}/forms`,
+          params: { orgId },
+        }),
+        axios({
+          method: 'GET',
+          url: `${host}/signers`,
+          params: { orgId },
+        }),
+      ];
 
       const [resForms, resSigners] = await Promise.all(serverReqs);
       this.setState({
@@ -85,6 +87,7 @@ class App extends Component {
     const { formId, signer, formFieldsEntries } = this.state;
     const { name, emails } = signer;
     try {
+      // TODO - add client/server auth
       const res = await axios({
         method: 'POST',
         url: `${host}/forms`,
@@ -110,8 +113,8 @@ class App extends Component {
         <Route exact path="/">
           {isLoading
             ? (
-              <div>
-                loading forms and signers...
+              <div className="spinner-border m-3">
+                <span className="sr-only">Loading...</span>
               </div>
             )
             : (
