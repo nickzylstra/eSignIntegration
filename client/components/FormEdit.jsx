@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 const FormEdit = (props) => {
   const { handleFormEdit } = props;
 
-  const defaultPatientName = 'patient name';
-  const [patientName, setPatientName] = useState(defaultPatientName);
+  const [patientName, setPatientName] = useState('');
   return (
     <form onSubmit={(e) => {
       e.preventDefault();
@@ -18,6 +17,7 @@ const FormEdit = (props) => {
         type="text"
         value={patientName}
         onChange={(e) => setPatientName(e.target.value)}
+        placeholder="first last"
       />
       <br />
       <input type="submit" value="Review form" />
