@@ -113,7 +113,7 @@ class App extends Component {
         <Route exact path="/">
           {isLoading
             ? (
-              <div className="spinner-border">
+              <div className="spinner-border m-3">
                 <span className="sr-only">Loading...</span>
               </div>
             )
