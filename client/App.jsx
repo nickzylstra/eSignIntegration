@@ -108,7 +108,7 @@ class App extends Component {
   render() {
     const { isLoading, forms, signers } = this.state;
     return (
-      <div>
+      <div aria-label="app">
         <h1>Referral Form Flow</h1>
         <Route exact path="/">
           {isLoading
