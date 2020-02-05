@@ -1,6 +1,9 @@
 import React from 'react';
+import axiosMock from 'axios';
 import customRender from '../test-utils/customRender.jsx';
 import App from './App.jsx';
+
+jest.mock('axios');
 
 
 describe('App', () => {

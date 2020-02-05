@@ -4,20 +4,14 @@ import axios from 'axios';
 import FormSelect from './components/FormSelect.jsx';
 import FormEdit from './components/FormEdit.jsx';
 
-const localhost = 'http://localhost:3000';
-const aws = 'https://esigndemo.nickzylstra.com/';
-const { origin } = window.location;
-const host = (origin && !origin.includes('localhost')) ? aws : localhost;
-if (host === localhost) {
-  console.log(`using ${localhost} for API server since client loaded at 'localhost'`);
-}
 
 class App extends Component {
   constructor(props) {
     super(props);
-    const { org } = props;
+    const { org, host } = props;
     this.state = {
       org,
+      host,
       forms: [],
       signers: [],
       isLoading: true,
@@ -33,7 +27,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const { org } = this.state;
+    const { org, host } = this.state;
     const { orgId } = org;
     try {
       // TODO - add client/server auth
@@ -84,7 +78,9 @@ class App extends Component {
   }
 
   async handleFormSubmit() {
-    const { formId, signer, formFieldsEntries } = this.state;
+    const {
+      host, formId, signer, formFieldsEntries,
+    } = this.state;
     const { name, emails } = signer;
     try {
       // TODO - add client/server auth
