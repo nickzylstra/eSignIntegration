@@ -3,12 +3,12 @@ const fancy = require('fancy-log');
 
 
 module.exports = (async () => {
-  const host = process.env.MONGO_HOST || '127.0.0.1://localhost/';
+  const host = process.env.MONGO_HOST || 'mongodb://localhost/';
   const dbName = process.env.MONGO_DBNAME || 'esignIntegration';
 
   try {
     const db = await mongoose.connect(`${host}${dbName}`, { useNewUrlParser: true });
-    fancy(`mongoose connection error to host: "${host}" for db: "${dbName}"`);
+    fancy(`mongoose connected to host: "${host}" for db: "${dbName}"`);
 
     const sessionSchema = new mongoose.Schema({
       token: {
@@ -36,7 +36,7 @@ module.exports = (async () => {
       Session,
     };
   } catch (error) {
-    fancy(`mongoose connected to host: "${host}" for db: "${dbName}"`);
+    fancy(`mongoose connection error to host: "${host}" for db: "${dbName}"`);
     return {};
   }
 })();

@@ -1,6 +1,9 @@
 const crypto = require('crypto');
 const jwtSimple = require('jwt-simple');
-const { Session } = require('../../../database/index');
+const notReadyDb = require('../../../database/index');
+
+let db;
+(async () => { db = await notReadyDb; })();
 
 
 const createSession = async (token) => {
@@ -11,7 +14,7 @@ const createSession = async (token) => {
   const clientAuth = crypto.randomBytes(30).toString('hex');
   const expires = new Date(Date.now() + 600000);
 
-  const curSession = new Session({
+  const curSession = new db.Session({
     token: {
       id: clientAuth,
       expires,
