@@ -22,6 +22,12 @@ const createWelkinAppRequestData = (client_id, client_secret, patient_id, worker
   return body;
 };
 
+const client_id = 'id1';
+const client_secret = 'secret1';
+const patient_id = 'patient1';
+const worker_id = 'worker1';
+const provider_id = 'provider1';
+
 
 describe('Server App', () => {
   describe('GET /', () => {
@@ -32,8 +38,11 @@ describe('Server App', () => {
   });
 
   describe('POST /auth', () => {
-    it('serves redirect to valid request', async () => {
-
+    test('serves redirect to valid request', async () => {
+      // eslint-disable-next-line max-len
+      const body = createWelkinAppRequestData(client_id, client_secret, patient_id, worker_id, provider_id);
+      const res = await request(app).post('/auth').send(body);
+      expect(res.statusCode).toBe(302);
     });
   });
 });
