@@ -5,6 +5,7 @@ const compression = require('compression');
 const fancy = require('fancy-log');
 const cors = require('cors');
 const xmlparser = require('express-xml-bodyparser');
+const jwtSimple = require('jwt-simple');
 const dsController = require('./controllers/docusign/index');
 
 
@@ -12,6 +13,59 @@ const app = express();
 app.use(cors());
 app.use(bodyparser.json({ extended: true }));
 app.use(compression());
+
+
+// TODO - add auth middleware
+app.use(express.static(path.resolve(__dirname, '..', 'public')));
+
+// TODO - add auth middleware
+app.get('/forms', async (req, res) => {
+  const { orgId } = req.query;
+  try {
+    const forms = await dsController.listTemplates(orgId);
+    res.json(forms);
+  } catch (error) {
+    fancy(error);
+    res.status(500).send('server error getting forms');
+  }
+});
+
+// TODO - add auth middleware
+app.post('/forms', async (req, res) => {
+  const {
+    formId,
+    signerName,
+    signerEmail,
+    formFieldsEntries,
+  } = req.body;
+  try {
+    const dsRes = await dsController
+      .sendEnvelope(formId, signerName, signerEmail, formFieldsEntries);
+    // TODO - post form record at Welkin
+    res.status(201).json(dsRes);
+  } catch (error) {
+    fancy(error);
+    res.status(500).send('server error submitting form');
+  }
+});
+
+// TODO - add auth middleware
+app.get('/signers', async (req, res) => {
+  const { orgId } = req.query;
+  try {
+    const signers = await dsController.listContacts(orgId);
+    res.json(signers);
+  } catch (error) {
+    fancy(error);
+    res.status(500).send('server error getting signers');
+  }
+});
+
+app.post('/form-status', xmlparser(), async (req, res) => {
+  fancy('Docusign envelope status update:', req.body);
+  // TODO - update form record at Welkin with completed status
+  res.end();
+});
 
 // TODO - setup post route to receive Welkin authentication
 /*
@@ -39,53 +93,21 @@ function send_app_request(client_id, client_secret, patient_id, worker_id, provi
   resp = requests.post('https://www.example.com/test/app', data=body);
 */
 
-// TODO - add client/server auth
-app.use(express.static(path.resolve(__dirname, '..', 'public')));
-
-app.get('/forms', async (req, res) => {
-  const { orgId } = req.query;
+app.post('/auth', (req, res) => {
+  const tokenData = req.body.token;
   try {
-    const forms = await dsController.listTemplates(orgId);
-    res.json(forms);
+    const token = jwtSimple.decode(tokenData, process.env.WEBHOOK_SECRET, true, 'HS256');
+    const providerId = token.welkin_provider_id;
+
+    // TODO - create and store session
+    const session = 'TODO';
+
+    // TODO - store session info as cookie or token in res.header
+    res.redirect(302, '/');
   } catch (error) {
     fancy(error);
-    res.status(500).send('server error getting forms');
+    res.status(403).send(`Invalid access credentials. Details: ${error.message}`);
   }
-});
-
-app.post('/forms', async (req, res) => {
-  const {
-    formId,
-    signerName,
-    signerEmail,
-    formFieldsEntries,
-  } = req.body;
-  try {
-    const dsRes = await dsController
-      .sendEnvelope(formId, signerName, signerEmail, formFieldsEntries);
-    // TODO - post form record at Welkin
-    res.status(201).json(dsRes);
-  } catch (error) {
-    fancy(error);
-    res.status(500).send('server error submitting form');
-  }
-});
-
-app.get('/signers', async (req, res) => {
-  const { orgId } = req.query;
-  try {
-    const signers = await dsController.listContacts(orgId);
-    res.json(signers);
-  } catch (error) {
-    fancy(error);
-    res.status(500).send('server error getting signers');
-  }
-});
-
-app.post('/form-status', xmlparser(), async (req, res) => {
-  fancy('Docusign envelope status update:', req.body);
-  // TODO - update form record at Welkin with completed status
-  res.end();
 });
 
 module.exports = app;
