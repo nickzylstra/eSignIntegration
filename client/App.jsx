@@ -94,7 +94,6 @@ class App extends Component {
           formFieldsEntries,
         },
       });
-      console.log(res);
       this.handleRouteChange('/finish');
     } catch (error) {
       console.log(error);

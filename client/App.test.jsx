@@ -54,7 +54,7 @@ describe('App', () => {
       .mockResolvedValueOnce(formsData)
       .mockResolvedValueOnce(signersData);
 
-    const { getByLabelText } = customRender(<App org="test" host={host} />);
+    const { getByLabelText, getByText } = customRender(<App org="test" host={host} />);
 
     const formSelectElem = await waitForElement(() => getByLabelText('formSelect'));
     fireEvent.change(formSelectElem, { target: { value: templateId } });
@@ -74,7 +74,11 @@ describe('App', () => {
     const reviewSubmitElem = await waitForElement(() => getByLabelText('reviewSubmit'));
     fireEvent.click(reviewSubmitElem);
 
-    // const startAgainElem = await waitForElement(() => getByLabelText('startAgainButton'));
-    // expect(startAgainElem).toBeInTheDocument();
+    const startAgainElem = await waitForElement(() => getByLabelText('startAgainButton'));
+    expect(startAgainElem).toBeInTheDocument();
+    fireEvent.click(startAgainElem);
+
+    const templateName = await waitForElement(() => getByText(form1Name));
+    expect(templateName).toBeInTheDocument();
   });
 });
