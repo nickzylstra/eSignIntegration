@@ -10,6 +10,10 @@ const FormSelect = (props) => {
   const defaultSignerId = '--- please select signer ---';
   const [signerId, setSignerId] = useState(defaultSignerId);
 
+  const handleChange = (e) => {
+    setFormId(e.target.value);
+  };
+
   return (
     <form onSubmit={(e) => {
       e.preventDefault();
@@ -18,8 +22,9 @@ const FormSelect = (props) => {
     >
       <select
         name="form"
+        aria-label="formSelect"
         value={formId}
-        onChange={(e) => setFormId(e.target.value)}
+        onChange={handleChange}
       >
         <option value={defaultFormId} disabled>{defaultFormId}</option>
         {forms.map(({ name, templateId }) => (
@@ -31,6 +36,7 @@ const FormSelect = (props) => {
 
       <select
         name="signer"
+        aria-label="signerSelect"
         value={signerId}
         onChange={(e) => setSignerId(e.target.value)}
       >
@@ -50,7 +56,7 @@ const FormSelect = (props) => {
 
       <br />
       <br />
-      <input type="submit" value="Edit form" />
+      <input aria-label="selectSubmit" type="submit" value="Edit form" />
     </form>
   );
 };

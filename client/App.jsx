@@ -4,20 +4,14 @@ import axios from 'axios';
 import FormSelect from './components/FormSelect.jsx';
 import FormEdit from './components/FormEdit.jsx';
 
-const localhost = 'http://localhost:3000';
-const aws = 'https://esigndemo.nickzylstra.com/';
-const { origin } = window.location;
-const host = (origin && !origin.includes('localhost')) ? aws : localhost;
-if (host === localhost) {
-  console.log(`using ${localhost} for API server since client loaded at 'localhost'`);
-}
 
 class App extends Component {
   constructor(props) {
     super(props);
-    const { org } = props;
+    const { org, host } = props;
     this.state = {
       org,
+      host,
       forms: [],
       signers: [],
       isLoading: true,
@@ -33,7 +27,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const { org } = this.state;
+    const { org, host } = this.state;
     const { orgId } = org;
     try {
       // TODO - add client/server auth
@@ -68,7 +62,6 @@ class App extends Component {
 
   handleFormSelect(formId, signerId) {
     const { signers } = this.state;
-
     const signer = signers.find(({ contactId }) => contactId === signerId);
     this.setState({
       formId, signer,
@@ -84,11 +77,13 @@ class App extends Component {
   }
 
   async handleFormSubmit() {
-    const { formId, signer, formFieldsEntries } = this.state;
+    const {
+      host, formId, signer, formFieldsEntries,
+    } = this.state;
     const { name, emails } = signer;
     try {
       // TODO - add client/server auth
-      const res = await axios({
+      await axios({
         method: 'POST',
         url: `${host}/forms`,
         data: {
@@ -98,7 +93,6 @@ class App extends Component {
           formFieldsEntries,
         },
       });
-      console.log(res);
       this.handleRouteChange('/finish');
     } catch (error) {
       console.log(error);
@@ -108,7 +102,7 @@ class App extends Component {
   render() {
     const { isLoading, forms, signers } = this.state;
     return (
-      <div>
+      <div aria-label="app">
         <h1>Referral Form Flow</h1>
         <Route exact path="/">
           {isLoading
@@ -133,14 +127,14 @@ class App extends Component {
         <Route path="/review">
           Review
           <br />
-          <button type="button" onClick={this.handleFormSubmit}>
+          <button aria-label="reviewSubmit" type="button" onClick={this.handleFormSubmit}>
             Send form
           </button>
         </Route>
         <Route path="/finish">
           Referral form sent for signature!
           <br />
-          <button type="button" onClick={() => this.handleRouteChange('/')}>
+          <button aria-label="startAgainButton" type="button" onClick={() => this.handleRouteChange('/')}>
             Start another form
           </button>
         </Route>
