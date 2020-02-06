@@ -4,7 +4,7 @@ const fancy = require('fancy-log');
 
 module.exports = (async () => {
   const host = process.env.MONGO_HOST || '127.0.0.1://localhost/';
-  const dbName = 'esignIntegration';
+  const dbName = process.env.MONGO_DBNAME || 'esignIntegration';
 
   try {
     const db = await mongoose.connect(`${host}${dbName}`, { useNewUrlParser: true });
