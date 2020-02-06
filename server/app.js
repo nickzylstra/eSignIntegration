@@ -5,7 +5,6 @@ const compression = require('compression');
 const fancy = require('fancy-log');
 const cors = require('cors');
 const xmlparser = require('express-xml-bodyparser');
-const jwtSimple = require('jwt-simple');
 const dsController = require('./controllers/docusign/index');
 const { createSession, validateSession } = require('./controllers/database/index');
 
@@ -69,18 +68,12 @@ app.post('/form-status', xmlparser(), async (req, res) => {
   res.end();
 });
 
-
-// TODO - setup post route to receive Welkin authentication
 app.post('/auth', (req, res) => {
   try {
     const { token } = req.body;
-    const tokenData = jwtSimple.decode(token, process.env.WELKIN_SECRET, true, 'HS256');
-    // eslint-disable-next-line camelcase
-    const { welkin_provider_id, welkin_patient_id, welkin_worker_id } = tokenData;
+    const { clientAuth, expires } = createSession(token);
 
-    const { authToken, expires } = createSession(welkin_provider_id, welkin_patient_id, welkin_worker_id);
-
-    res.cookie('clientToken', authToken, { expires });
+    res.cookie('clientAuth', clientAuth, { expires });
     res.redirect(302, '/');
   } catch (error) {
     fancy(error);

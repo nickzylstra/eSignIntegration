@@ -1,12 +1,18 @@
 const crypto = require('crypto');
+const jwtSimple = require('jwt-simple');
 
-const createSession = (providerId, patientId, workerId) => {
+
+const createSession = (token) => {
+  const tokenData = jwtSimple.decode(token, process.env.WELKIN_SECRET, true, 'HS256');
+
+  // eslint-disable-next-line camelcase
+  const { welkin_provider_id, welkin_patient_id, welkin_worker_id } = tokenData;
   const clientToken = {
-    authToken: crypto.randomBytes(30).toString('hex'),
+    clientAuth: crypto.randomBytes(30).toString('hex'),
     expires: new Date(Date.now() + 600000),
   };
 
-  // TODO - store arguments and token in db
+  // TODO - store welkin info and token in db
   return clientToken;
 };
 
