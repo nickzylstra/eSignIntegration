@@ -9,13 +9,17 @@ jest.mock('axios');
 const host = 'http://localhost:3000';
 
 describe('App', () => {
+  const templateId = 'id1';
   const form1Name = 'form1';
+  const contactId = 'id1';
   const signer1Name = 'signer1';
+  const signerOrg = 'org1';
+  const signerEmails = ['email1'];
   const formsData = {
     data: {
       envelopeTemplates: [{
         name: form1Name,
-        templateId: 'id1',
+        templateId,
       }],
     },
   };
@@ -23,9 +27,9 @@ describe('App', () => {
     data: {
       contacts: [{
         name: signer1Name,
-        contactId: 'id1',
-        organization: 'org1',
-        emails: ['email1'],
+        contactId,
+        organization: signerOrg,
+        emails: signerEmails,
       }],
     },
   };
@@ -51,12 +55,14 @@ describe('App', () => {
       .mockResolvedValueOnce(signersData);
 
     const { getByLabelText } = customRender(<App org="test" host={host} />);
-    const formSelectElem = await waitForElement(() => getByLabelText('formSelect'));
-    const signerSelectElem = await waitForElement(() => getByLabelText('signerSelect'));
-    const selectSubmitElem = await waitForElement(() => getByLabelText('selectSubmit'));
 
-    fireEvent.change(formSelectElem, { target: { value: form1Name } });
-    fireEvent.change(signerSelectElem, { target: { value: signer1Name } });
+    const formSelectElem = await waitForElement(() => getByLabelText('formSelect'));
+    fireEvent.change(formSelectElem, { target: { value: templateId } });
+
+    const signerSelectElem = await waitForElement(() => getByLabelText('signerSelect'));
+    fireEvent.change(signerSelectElem, { target: { value: contactId } });
+
+    const selectSubmitElem = await waitForElement(() => getByLabelText('selectSubmit'));
     fireEvent.click(selectSubmitElem);
 
     const patientInputElem = await waitForElement(() => getByLabelText('patientInput'));
@@ -65,8 +71,8 @@ describe('App', () => {
     const editSubmitElem = await waitForElement(() => getByLabelText('editSubmit'));
     fireEvent.click(editSubmitElem);
 
-    // const reviewSubmitElem = await waitForElement(() => getByLabelText('reviewSubmit'));
-    // fireEvent.click(reviewSubmitElem);
+    const reviewSubmitElem = await waitForElement(() => getByLabelText('reviewSubmit'));
+    fireEvent.click(reviewSubmitElem);
 
     // const startAgainElem = await waitForElement(() => getByLabelText('startAgainButton'));
     // expect(startAgainElem).toBeInTheDocument();

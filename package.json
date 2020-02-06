@@ -12,7 +12,7 @@
     "start:debug": "nodemon --inspect server/server.js",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "test:debug": "node --inspect-brk=9230 node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
   },
   "repository": {
     "type": "git",

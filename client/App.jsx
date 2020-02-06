@@ -62,7 +62,7 @@ class App extends Component {
 
   handleFormSelect(formId, signerId) {
     const { signers } = this.state;
-
+    debugger;
     const signer = signers.find(({ contactId }) => contactId === signerId);
     this.setState({
       formId, signer,
