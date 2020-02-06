@@ -62,7 +62,6 @@ class App extends Component {
 
   handleFormSelect(formId, signerId) {
     const { signers } = this.state;
-    debugger;
     const signer = signers.find(({ contactId }) => contactId === signerId);
     this.setState({
       formId, signer,
@@ -84,7 +83,7 @@ class App extends Component {
     const { name, emails } = signer;
     try {
       // TODO - add client/server auth
-      const res = await axios({
+      await axios({
         method: 'POST',
         url: `${host}/forms`,
         data: {
