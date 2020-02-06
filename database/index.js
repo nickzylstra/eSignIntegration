@@ -3,7 +3,7 @@ const fancy = require('fancy-log');
 
 
 module.exports = (async () => {
-  const host = process.env.MONGO_HOST || 'mongodb://localhost/';
+  const host = process.env.MONGO_HOST || '127.0.0.1://localhost/';
   const dbName = 'esignIntegration';
 
   try {

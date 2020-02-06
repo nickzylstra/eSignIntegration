@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const jwtSimple = require('jwt-simple');
+const { db } = require('../../../database/index');
 
 
 const createSession = (token) => {
