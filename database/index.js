@@ -10,14 +10,19 @@ module.exports = (async () => {
     const db = await mongoose.connect(`${host}${dbName}`, { useNewUrlParser: true });
     fancy(`mongoose connection error to host: "${host}" for db: "${dbName}"`);
 
-    // session schema / model
-    //   token
-    //     id
-    //     expires
-    //   welkin
-    //     providerId
-    //     patientId
-    //     workedId
+    const sessionSchema = new mongoose.Schema({
+      token: {
+        id: String,
+        expires: Date,
+      },
+      welkin: {
+        providerId: String,
+        patientId: String,
+        workedId: String,
+      },
+    });
+
+    const Session = mongoose.model('Session', sessionSchema);
 
     // provider schema / model
     //   providerId
@@ -28,6 +33,7 @@ module.exports = (async () => {
 
     return {
       db,
+      Session,
     };
   } catch (error) {
     fancy(`mongoose connected to host: "${host}" for db: "${dbName}"`);
