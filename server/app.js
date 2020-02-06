@@ -72,15 +72,15 @@ app.post('/form-status', xmlparser(), async (req, res) => {
 
 // TODO - setup post route to receive Welkin authentication
 app.post('/auth', (req, res) => {
-  const { token } = req.body;
   try {
+    const { token } = req.body;
     const tokenData = jwtSimple.decode(token, process.env.WELKIN_SECRET, true, 'HS256');
     // eslint-disable-next-line camelcase
     const { welkin_provider_id, welkin_patient_id, welkin_worker_id } = tokenData;
 
-    const sessionCookie = createSession(welkin_provider_id, welkin_patient_id, welkin_worker_id);
+    const { authToken, expires } = createSession(welkin_provider_id, welkin_patient_id, welkin_worker_id);
 
-    // TODO - store session info as cookie or token in res.header
+    res.cookie('clientToken', authToken, { expires });
     res.redirect(302, '/');
   } catch (error) {
     fancy(error);
