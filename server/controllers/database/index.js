@@ -1,19 +1,30 @@
 const crypto = require('crypto');
 const jwtSimple = require('jwt-simple');
-const { db } = require('../../../database/index');
+const { Session } = require('../../../database/index');
 
 
-const createSession = (token) => {
+const createSession = async (token) => {
   const tokenData = jwtSimple.decode(token, process.env.WELKIN_SECRET, true, 'HS256');
 
   // eslint-disable-next-line camelcase
   const { welkin_provider_id, welkin_patient_id, welkin_worker_id } = tokenData;
-  const clientToken = {
-    clientAuth: crypto.randomBytes(30).toString('hex'),
-    expires: new Date(Date.now() + 600000),
-  };
+  const clientAuth = crypto.randomBytes(30).toString('hex');
+  const expires = new Date(Date.now() + 600000);
 
-  // TODO - store welkin info and token in db
+  const curSession = new Session({
+    token: {
+      id: clientAuth,
+      expires,
+    },
+    welkin: {
+      providerId: welkin_provider_id,
+      patientId: welkin_patient_id,
+      workerId: welkin_worker_id,
+    },
+  });
+
+  await curSession.save();
+  const clientToken = { clientAuth, expires };
   return clientToken;
 };
 

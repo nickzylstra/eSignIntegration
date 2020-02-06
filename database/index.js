@@ -18,7 +18,7 @@ module.exports = (async () => {
       welkin: {
         providerId: String,
         patientId: String,
-        workedId: String,
+        workerId: String,
       },
     });
 
