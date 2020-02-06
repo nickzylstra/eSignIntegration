@@ -14,13 +14,14 @@ const FormEdit = (props) => {
     >
       Patient Name:
       <input
+        aria-label="patientInput"
         type="text"
         value={patientName}
         onChange={(e) => setPatientName(e.target.value)}
         placeholder="first last"
       />
       <br />
-      <input type="submit" value="Review form" />
+      <input aria-label="editSubmit" type="submit" value="Review form" />
     </form>
   );
 };

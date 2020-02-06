@@ -129,14 +129,14 @@ class App extends Component {
         <Route path="/review">
           Review
           <br />
-          <button type="button" onClick={this.handleFormSubmit}>
+          <button aria-label="reviewSubmit" type="button" onClick={this.handleFormSubmit}>
             Send form
           </button>
         </Route>
         <Route path="/finish">
           Referral form sent for signature!
           <br />
-          <button type="button" onClick={() => this.handleRouteChange('/')}>
+          <button aria-label="startAgainButton" type="button" onClick={() => this.handleRouteChange('/')}>
             Start another form
           </button>
         </Route>
