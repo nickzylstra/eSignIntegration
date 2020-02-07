@@ -6,7 +6,7 @@ const fancy = require('fancy-log');
 const cors = require('cors');
 const xmlparser = require('express-xml-bodyparser');
 const dsController = require('./controllers/docusign/index');
-const { createSession, validateSession } = require('./controllers/database/index');
+const { createSession } = require('./controllers/database/index');
 
 
 const app = express();
