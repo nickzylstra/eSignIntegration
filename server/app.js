@@ -6,12 +6,13 @@ const fancy = require('fancy-log');
 const cors = require('cors');
 const xmlparser = require('express-xml-bodyparser');
 const dsController = require('./controllers/docusign/index');
-const { createSession, validateSession } = require('./controllers/database/index');
+const { createSession } = require('./controllers/database/index');
 
 
 const app = express();
 app.use(cors());
 app.use(bodyparser.json({ extended: true }));
+app.use(bodyparser.urlencoded({ extended: true }));
 app.use(compression());
 
 // TODO - create auth middleware
