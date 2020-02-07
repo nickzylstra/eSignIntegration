@@ -7,8 +7,8 @@ module.exports = (async () => {
   const dbName = process.env.MONGO_DBNAME || 'esignIntegration';
 
   try {
-    const db = await mongoose.connect(`${host}${dbName}`, { useNewUrlParser: true });
-    fancy(`mongoose connected to host: "${host}" for db: "${dbName}"`);
+    const conn = await mongoose.connect(`${host}${dbName}`, { useNewUrlParser: true, useUnifiedTopology: true });
+    fancy(`mongoose connected to host: "${host}" for conn: "${dbName}"`);
 
     const sessionSchema = new mongoose.Schema({
       token: {
@@ -32,11 +32,11 @@ module.exports = (async () => {
     //     privateKey
 
     return {
-      db,
+      conn,
       Session,
     };
   } catch (error) {
-    fancy(`mongoose connection error to host: "${host}" for db: "${dbName}"`);
+    fancy(`mongoose connection error to host: "${host}" for conn: "${dbName}"`);
     return {};
   }
 })();

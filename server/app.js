@@ -26,7 +26,7 @@ app.get('/forms', async (req, res) => {
     const forms = await dsController.listTemplates(orgId);
     res.json(forms);
   } catch (error) {
-    fancy(error);
+    fancy(error.message);
     res.status(500).send('server error getting forms');
   }
 });
@@ -45,7 +45,7 @@ app.post('/forms', async (req, res) => {
     // TODO - post form record at Welkin
     res.status(201).json(dsRes);
   } catch (error) {
-    fancy(error);
+    fancy(error.message);
     res.status(500).send('server error submitting form');
   }
 });
@@ -57,7 +57,7 @@ app.get('/signers', async (req, res) => {
     const signers = await dsController.listContacts(orgId);
     res.json(signers);
   } catch (error) {
-    fancy(error);
+    fancy(error.message);
     res.status(500).send('server error getting signers');
   }
 });
@@ -68,15 +68,15 @@ app.post('/form-status', xmlparser(), async (req, res) => {
   res.end();
 });
 
-app.post('/auth', (req, res) => {
+app.post('/auth', async (req, res) => {
   try {
     const { token } = req.body;
-    const { clientAuth, expires } = createSession(token);
+    const { clientAuth, expires } = await createSession(token);
 
     res.cookie('clientAuth', clientAuth, { expires });
     res.redirect(302, '/');
   } catch (error) {
-    fancy(error);
+    fancy(error.message);
     res.status(403).send(`Invalid access credentials. Details: ${error.message}`);
   }
 });

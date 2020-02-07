@@ -7,7 +7,7 @@ let db;
 
 
 const createSession = async (token) => {
-  const tokenData = jwtSimple.decode(token, process.env.WELKIN_SECRET, true, 'HS256');
+  const tokenData = jwtSimple.decode(token, process.env.WELKIN_SECRET);
 
   // eslint-disable-next-line camelcase
   const { welkin_provider_id, welkin_patient_id, welkin_worker_id } = tokenData;
