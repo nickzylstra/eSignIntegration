@@ -28,6 +28,11 @@ const createSession = async (token) => {
 };
 
 const validateSession = () => {
+  // get clientAuth cookie from request
+  // if !clientAuth in sessions db
+    // return invalid session, direct user reopen app from Welkin app
+
+
 
 };
 
