@@ -3,6 +3,7 @@ process.env.NODE_ENV = 'test';
 process.env.MONGO_DBNAME = 'esignIntegrationTest';
 const jwtSimple = require('jwt-simple');
 const request = require('supertest');
+const mongoose = require('mongoose');
 const app = require('./app');
 
 // eslint-disable-next-line max-len
@@ -22,19 +23,17 @@ const createWelkinAppRequestData = (client_id, client_secret, patient_id, worker
   return body;
 };
 
+async function removeAllCollections() {
+  Object.keys(mongoose.connection.collections).forEach(async (collectionName) => {
+    const collection = mongoose.connection.collections[collectionName];
+    await collection.deleteMany();
+  });
+}
 
 describe('Server App', () => {
-  // async function removeAllCollections() {
-  //   const collections = Object.keys(mongoose.connection.collections);
-  //   for (const collectionName of collections) {
-  //     const collection = mongoose.connection.collections[collectionName];
-  //     await collection.deleteMany();
-  //   }
-  // }
-
-  // afterEach(async () => {
-  //   await removeAllCollections();
-  // });
+  afterEach(async () => {
+    await removeAllCollections();
+  });
 
   describe('GET /', () => {
     test('It should respond with 200', async () => {
@@ -57,6 +56,8 @@ describe('Server App', () => {
       const body = createWelkinAppRequestData(client_id, client_secret, patient_id, worker_id, provider_id);
       const res = await request(app).post('/auth').send(body);
       expect(res.statusCode).toBe(302);
+      const session = mongoose.connection.collections.sessions.find({ providerId: provider_id });
+      expect(session).toBeDefined();
     });
 
     test('serves 403 to request with invalid token', async () => {
