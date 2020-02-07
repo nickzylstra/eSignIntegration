@@ -15,15 +15,11 @@ const createSession = async (token) => {
   const expires = new Date(Date.now() + 600000);
 
   const curSession = new db.Session({
-    token: {
-      id: clientAuth,
-      expires,
-    },
-    welkin: {
-      providerId: welkin_provider_id,
-      patientId: welkin_patient_id,
-      workerId: welkin_worker_id,
-    },
+    id: clientAuth,
+    expires,
+    providerId: welkin_provider_id,
+    patientId: welkin_patient_id,
+    workerId: welkin_worker_id,
   });
 
   await curSession.save();
