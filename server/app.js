@@ -12,6 +12,7 @@ const { createSession } = require('./controllers/database/index');
 const app = express();
 app.use(cors());
 app.use(bodyparser.json({ extended: true }));
+app.use(bodyparser.urlencoded({ extended: true }));
 app.use(compression());
 
 // TODO - create auth middleware
