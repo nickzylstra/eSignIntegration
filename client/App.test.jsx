@@ -8,7 +8,7 @@ jest.mock('axios');
 
 const host = 'http://localhost:3000';
 
-describe('App', () => {
+describe('Client App', () => {
   const templateId = 'id1';
   const form1Name = 'form1';
   const contactId = 'id1';
