@@ -27,16 +27,12 @@ const createSession = async (token) => {
   return clientToken;
 };
 
-const validateSession = () => {
-  // get clientAuth cookie from request
-  // if !clientAuth in sessions db
-    // return invalid session, direct user reopen app from Welkin app
-
-
-
+const getSession = async (tokenId) => {
+  const session = await db.Session.findOne({ tokenId }).exec();
+  return session;
 };
 
 module.exports = {
   createSession,
-  validateSession,
+  getSession,
 };
