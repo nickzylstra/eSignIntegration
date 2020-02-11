@@ -39,7 +39,7 @@ describe('Client App', () => {
       .mockResolvedValueOnce(formsData)
       .mockResolvedValueOnce(signersData);
 
-    const { getByLabelText, getByText } = customRender(<App org="test" host={host} />);
+    const { getByLabelText, getByText } = customRender(<App host={host} />);
     const label = getByLabelText(/app/i);
     const templateName = await waitForElement(() => getByText(form1Name));
     const signerName = await waitForElement(() => getByText(new RegExp(`${signer1Name}`)));
@@ -54,7 +54,7 @@ describe('Client App', () => {
       .mockResolvedValueOnce(formsData)
       .mockResolvedValueOnce(signersData);
 
-    const { getByLabelText, getByText } = customRender(<App org="test" host={host} />);
+    const { getByLabelText, getByText } = customRender(<App host={host} />);
 
     const formSelectElem = await waitForElement(() => getByLabelText('formSelect'));
     fireEvent.change(formSelectElem, { target: { value: templateId } });
