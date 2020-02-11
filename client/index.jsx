@@ -13,10 +13,8 @@ if (host === localhost) {
   console.log(`using ${localhost} for API server since client loaded at 'localhost'`);
 }
 
-// TODO - get org id from Welkin request to start app
-const org = { orgId: 'TODO' };
 ReactDOM.render((
   <BrowserRouter>
-    <App org={org} host={host} />
+    <App host={host} />
   </BrowserRouter>
 ), document.getElementById('app'));

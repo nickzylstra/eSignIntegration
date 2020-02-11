@@ -1,30 +1,33 @@
 const express = require('express');
 const path = require('path');
-const bodyparser = require('body-parser');
 const compression = require('compression');
 const fancy = require('fancy-log');
 const cors = require('cors');
-const xmlparser = require('express-xml-bodyparser');
+const bodyParser = require('body-parser');
+const xmlParser = require('express-xml-bodyparser');
+const cookieParser = require('cookie-parser');
 const dsController = require('./controllers/docusign/index');
-const { createSession } = require('./controllers/database/index');
+const { requireAuth } = require('./middleware/requireAuth');
+const { createSession } = require('./controllers/auth/index');
 
 
 const app = express();
 app.use(cors());
-app.use(bodyparser.json({ extended: true }));
-app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(compression());
 
-// TODO - create auth middleware
+app.get('/', (req, res) => {
+  res.send('this esign app must be opened through the Welkin app');
+});
 
-// TODO - add auth middleware
-app.use(express.static(path.resolve(__dirname, '..', 'public')));
+app.use('/static', requireAuth, express.static(path.resolve(__dirname, '..', 'public')));
 
-// TODO - add auth middleware, parse providerId to pass to dsController
-app.get('/forms', async (req, res) => {
-  const { orgId } = req.query;
+app.get('/forms', requireAuth, async (req, res) => {
+  const { providerId } = req.session;
   try {
-    const forms = await dsController.listTemplates(orgId);
+    const forms = await dsController.listTemplates(providerId);
     res.json(forms);
   } catch (error) {
     fancy(error.message);
@@ -33,7 +36,7 @@ app.get('/forms', async (req, res) => {
 });
 
 // TODO - add auth middleware, parse providerId to pass to dsController
-app.post('/forms', async (req, res) => {
+app.post('/forms', requireAuth, async (req, res) => {
   const {
     formId,
     signerName,
@@ -51,11 +54,10 @@ app.post('/forms', async (req, res) => {
   }
 });
 
-// TODO - add auth middleware, parse providerId to pass to dsController
-app.get('/signers', async (req, res) => {
-  const { orgId } = req.query;
+app.get('/signers', requireAuth, async (req, res) => {
+  const { providerId } = req.session;
   try {
-    const signers = await dsController.listContacts(orgId);
+    const signers = await dsController.listContacts(providerId);
     res.json(signers);
   } catch (error) {
     fancy(error.message);
@@ -63,7 +65,7 @@ app.get('/signers', async (req, res) => {
   }
 });
 
-app.post('/form-status', xmlparser(), async (req, res) => {
+app.post('/form-status', xmlParser(), async (req, res) => {
   fancy('Docusign envelope status update:', req.body);
   // TODO - update form record at Welkin with completed status
   res.end();
@@ -75,7 +77,7 @@ app.post('/auth', async (req, res) => {
     const { clientAuth, expires } = await createSession(token);
 
     res.cookie('clientAuth', clientAuth, { expires });
-    res.redirect(302, '/');
+    res.redirect(302, '/static');
   } catch (error) {
     fancy(error.message);
     res.status(403).send(`Invalid access credentials. Details: ${error.message}`);

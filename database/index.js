@@ -8,7 +8,7 @@ module.exports = (async () => {
 
   try {
     const conn = await mongoose.connect(`${host}${dbName}`, { useNewUrlParser: true, useUnifiedTopology: true });
-    fancy(`mongoose connected to host: "${host}" for conn: "${dbName}"`);
+    fancy(`mongoose connected to host: "${host}" for db: "${dbName}"`);
 
     const sessionSchema = new mongoose.Schema({
       tokenId: String,
@@ -32,7 +32,7 @@ module.exports = (async () => {
       Session,
     };
   } catch (error) {
-    fancy(`mongoose connection error to host: "${host}" for conn: "${dbName}"`);
+    fancy(`mongoose connection error to host: "${host}" for db: "${dbName}"`);
     return {};
   }
 })();

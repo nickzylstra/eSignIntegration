@@ -27,11 +27,12 @@ const createSession = async (token) => {
   return clientToken;
 };
 
-const validateSession = () => {
-
+const getSession = async (tokenId) => {
+  const session = await db.Session.findOne({ tokenId }).exec();
+  return session;
 };
 
 module.exports = {
   createSession,
-  validateSession,
+  getSession,
 };

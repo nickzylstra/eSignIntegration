@@ -8,9 +8,8 @@ import FormEdit from './components/FormEdit.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-    const { org, host } = props;
+    const { host } = props;
     this.state = {
-      org,
       host,
       forms: [],
       signers: [],
@@ -27,20 +26,18 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const { org, host } = this.state;
-    const { orgId } = org;
+    const { host } = this.state;
     try {
-      // TODO - add client/server auth
       const serverReqs = [
         axios({
           method: 'GET',
           url: `${host}/forms`,
-          params: { orgId },
+          withCredentials: true,
         }),
         axios({
           method: 'GET',
           url: `${host}/signers`,
-          params: { orgId },
+          withCredentials: true,
         }),
       ];
 
@@ -82,7 +79,6 @@ class App extends Component {
     } = this.state;
     const { name, emails } = signer;
     try {
-      // TODO - add client/server auth
       await axios({
         method: 'POST',
         url: `${host}/forms`,
@@ -92,6 +88,7 @@ class App extends Component {
           signerEmail: emails[0],
           formFieldsEntries,
         },
+        withCredentials: true,
       });
       this.handleRouteChange('/finish');
     } catch (error) {
