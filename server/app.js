@@ -21,11 +21,10 @@ app.use(compression());
 // TODO - add auth middleware,
 app.use(express.static(path.resolve(__dirname, '..', 'public')));
 
-// TODO - add auth middleware, parse providerId to pass to dsController
-app.get('/forms', async (req, res) => {
-  const { orgId } = req.query;
+app.get('/forms', requireAuth, async (req, res) => {
+  const { providerId } = req.session;
   try {
-    const forms = await dsController.listTemplates(orgId);
+    const forms = await dsController.listTemplates(providerId);
     res.json(forms);
   } catch (error) {
     fancy(error.message);
