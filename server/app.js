@@ -18,15 +18,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 
-app.get('/', (req, res) => {
-  res.send('this esign app must be opened through the Welkin app');
-});
+// app.get('/', (req, res) => {
+//   res.send('this esign app must be opened through the Welkin app');
+// });
 
-app.use('/static', requireAuth, express.static(path.resolve(__dirname, '..', 'public')));
+// app.use('/static', requireAuth, express.static(path.resolve(__dirname, '..', 'public')));
+app.use('/', express.static(path.resolve(__dirname, '..', 'public')));
 
 app.get('/forms', requireAuth, async (req, res) => {
-  const { providerId } = req.session;
   try {
+    const { providerId } = req.session;
     const forms = await dsController.listTemplates(providerId);
     res.json(forms);
   } catch (error) {
@@ -37,13 +38,13 @@ app.get('/forms', requireAuth, async (req, res) => {
 
 // TODO - add auth middleware, parse providerId to pass to dsController
 app.post('/forms', requireAuth, async (req, res) => {
-  const {
-    formId,
-    signerName,
-    signerEmail,
-    formFieldsEntries,
-  } = req.body;
   try {
+    const {
+      formId,
+      signerName,
+      signerEmail,
+      formFieldsEntries,
+    } = req.body;
     const dsRes = await dsController
       .sendEnvelope(formId, signerName, signerEmail, formFieldsEntries);
     // TODO - post form record at Welkin
@@ -55,8 +56,8 @@ app.post('/forms', requireAuth, async (req, res) => {
 });
 
 app.get('/signers', requireAuth, async (req, res) => {
-  const { providerId } = req.session;
   try {
+    const { providerId } = req.session;
     const signers = await dsController.listContacts(providerId);
     res.json(signers);
   } catch (error) {
