@@ -73,7 +73,7 @@ app.post('/auth', async (req, res) => {
     const { token } = req.body;
     const { clientAuth, expires } = await createSession(token);
 
-    res.cookie('clientAuth', clientAuth, { expires, sameSite: true, secure: true });
+    res.cookie('clientAuth', clientAuth, { expires, sameSite: 'None', secure: true });
     res.redirect(302, '/');
   } catch (error) {
     fancy(error.message);

@@ -17,7 +17,13 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ['css-loader'],
+        use: {
+          loader: 'css-loader',
+          options: {
+            importLoaders: 1,
+            modules: true,
+          },
+        },
       },
     ],
   },

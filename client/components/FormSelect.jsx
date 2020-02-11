@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from '../App.css';
 
 const FormSelect = (props) => {
   const {
@@ -56,7 +57,7 @@ const FormSelect = (props) => {
 
       <br />
       <br />
-      <input className="Button-Primary" aria-label="selectSubmit" type="submit" value="Edit form" />
+      <input className={styles.buttonPrimary} aria-label="selectSubmit" type="submit" value="Edit form" />
     </form>
   );
 };
