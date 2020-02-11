@@ -51,11 +51,10 @@ app.post('/forms', async (req, res) => {
   }
 });
 
-// TODO - add auth middleware, parse providerId to pass to dsController
-app.get('/signers', async (req, res) => {
-  const { orgId } = req.query;
+app.get('/signers', requireAuth, async (req, res) => {
+  const { providerId } = req.session;
   try {
-    const signers = await dsController.listContacts(orgId);
+    const signers = await dsController.listContacts(providerId);
     res.json(signers);
   } catch (error) {
     fancy(error.message);

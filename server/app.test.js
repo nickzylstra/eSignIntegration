@@ -83,8 +83,11 @@ describe('Server App', () => {
       const clientAuth = res1.headers['set-cookie'][0].match(/clientAuth=(\w*);/)[1];
       expect(clientAuth).toBeDefined();
 
-      const res2 = await request(app).get('/forms').set('Cookie', `clientAuth=${clientAuth}`);
-      expect(res2.status).toBe(200);
+      const resForms = await request(app).get('/forms').set('Cookie', `clientAuth=${clientAuth}`);
+      expect(resForms.status).toBe(200);
+
+      const resSigners = await request(app).get('/signers').set('Cookie', `clientAuth=${clientAuth}`);
+      expect(resSigners.status).toBe(200);
     });
   });
 });
