@@ -83,9 +83,11 @@ describe('Server App', () => {
       const clientAuth = res1.headers['set-cookie'][0].match(/clientAuth=(\w*);/)[1];
       expect(clientAuth).toBeDefined();
 
+      // TODO - mock docusign controller funcs to avoid actual API calls
       const resForms = await request(app).get('/forms').set('Cookie', `clientAuth=${clientAuth}`);
       expect(resForms.status).toBe(200);
 
+      // TODO - mock docusign controller funcs to avoid actual API calls
       const resSigners = await request(app).get('/signers').set('Cookie', `clientAuth=${clientAuth}`);
       expect(resSigners.status).toBe(200);
     });

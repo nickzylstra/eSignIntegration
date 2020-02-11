@@ -33,7 +33,7 @@ app.get('/forms', requireAuth, async (req, res) => {
 });
 
 // TODO - add auth middleware, parse providerId to pass to dsController
-app.post('/forms', async (req, res) => {
+app.post('/forms', requireAuth, async (req, res) => {
   const {
     formId,
     signerName,
