@@ -56,7 +56,7 @@ const FormSelect = (props) => {
 
       <br />
       <br />
-      <input aria-label="selectSubmit" type="submit" value="Edit form" />
+      <input className="Button-Primary" aria-label="selectSubmit" type="submit" value="Edit form" />
     </form>
   );
 };

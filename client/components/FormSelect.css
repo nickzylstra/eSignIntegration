@@ -1,0 +1,19 @@
+.Button-Primary {
+  background-color: #00A0BD;
+  color: #FFFFFF;
+}
+
+.Button-Primary:hover {
+  background-color: #008299;
+  color: #FFFFFF;
+}
+
+.Button-Secondary {
+  background-color: #F5FDFF;
+  color: #00A0BD;
+}
+
+.Button-Secondary:hover {
+  background-color: #F5FDFF;
+  color: #008299;
+}
