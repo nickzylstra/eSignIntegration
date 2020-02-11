@@ -32,9 +32,9 @@ app.get('/forms', requireAuth, async (req, res) => {
   }
 });
 
-// TODO - add auth middleware, parse providerId to pass to dsController
 app.post('/forms', requireAuth, async (req, res) => {
   try {
+    const { providerId } = req.session;
     const {
       formId,
       signerName,
@@ -42,7 +42,7 @@ app.post('/forms', requireAuth, async (req, res) => {
       formFieldsEntries,
     } = req.body;
     const dsRes = await dsController
-      .sendEnvelope(formId, signerName, signerEmail, formFieldsEntries);
+      .sendEnvelope(providerId, formId, signerName, signerEmail, formFieldsEntries);
     // TODO - post form record at Welkin
     res.status(201).json(dsRes);
   } catch (error) {
