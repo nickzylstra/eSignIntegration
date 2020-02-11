@@ -3,7 +3,7 @@ import { Route, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import FormSelect from './components/FormSelect.jsx';
 import FormEdit from './components/FormEdit.jsx';
-
+import './App.css';
 
 class App extends Component {
   constructor(props) {
@@ -100,7 +100,7 @@ class App extends Component {
     const { isLoading, forms, signers } = this.state;
     return (
       <div aria-label="app">
-        <h1>Referral Form Flow</h1>
+        <h1 className="typ-L">Referral Form Flow</h1>
         <Route exact path="/">
           {isLoading
             ? (
