@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import '../App.css';
+
 
 const FormEdit = (props) => {
   const { handleFormEdit } = props;
@@ -21,7 +23,7 @@ const FormEdit = (props) => {
         placeholder="first last"
       />
       <br />
-      <input aria-label="editSubmit" type="submit" value="Review form" />
+      <input className="Button-Primary" aria-label="editSubmit" type="submit" value="Review form" />
     </form>
   );
 };
