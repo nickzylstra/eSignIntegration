@@ -18,8 +18,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 
-// TODO - add auth middleware,
-app.use(express.static(path.resolve(__dirname, '..', 'public')));
+app.get('/', (req, res) => {
+  res.send('this esign app must be opened through the Welkin app');
+});
+
+app.use('/static', requireAuth, express.static(path.resolve(__dirname, '..', 'public')));
 
 app.get('/forms', requireAuth, async (req, res) => {
   const { providerId } = req.session;
@@ -74,7 +77,7 @@ app.post('/auth', async (req, res) => {
     const { clientAuth, expires } = await createSession(token);
 
     res.cookie('clientAuth', clientAuth, { expires });
-    res.redirect(302, '/');
+    res.redirect(302, '/static');
   } catch (error) {
     fancy(error.message);
     res.status(403).send(`Invalid access credentials. Details: ${error.message}`);
