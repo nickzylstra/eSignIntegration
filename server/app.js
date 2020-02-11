@@ -18,11 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 
-// app.get('/', (req, res) => {
-//   res.send('this esign app must be opened through the Welkin app');
-// });
 
-// app.use('/static', requireAuth, express.static(path.resolve(__dirname, '..', 'public')));
 app.use('/', express.static(path.resolve(__dirname, '..', 'public')));
 
 app.get('/forms', requireAuth, async (req, res) => {
@@ -36,9 +32,9 @@ app.get('/forms', requireAuth, async (req, res) => {
   }
 });
 
-// TODO - add auth middleware, parse providerId to pass to dsController
 app.post('/forms', requireAuth, async (req, res) => {
   try {
+    const { providerId } = req.session;
     const {
       formId,
       signerName,
@@ -46,7 +42,7 @@ app.post('/forms', requireAuth, async (req, res) => {
       formFieldsEntries,
     } = req.body;
     const dsRes = await dsController
-      .sendEnvelope(formId, signerName, signerEmail, formFieldsEntries);
+      .sendEnvelope(providerId, formId, signerName, signerEmail, formFieldsEntries);
     // TODO - post form record at Welkin
     res.status(201).json(dsRes);
   } catch (error) {
@@ -77,8 +73,8 @@ app.post('/auth', async (req, res) => {
     const { token } = req.body;
     const { clientAuth, expires } = await createSession(token);
 
-    res.cookie('clientAuth', clientAuth, { expires });
-    res.redirect(302, '/static');
+    res.cookie('clientAuth', clientAuth, { expires, sameSite: true, secure: true });
+    res.redirect(302, '/');
   } catch (error) {
     fancy(error.message);
     res.status(403).send(`Invalid access credentials. Details: ${error.message}`);

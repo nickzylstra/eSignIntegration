@@ -1,8 +1,9 @@
 const docusign = require('docusign-esign');
 const dsJwtAuth = require('./dsJwtAuth');
 
-module.exports = async function sendEnvelope(formId, signerName, signerEmail, formFieldsEntries) {
-  // TODO - refactor to use passed orgId to retrieve org specific jsJwtAuth.accessToken from local db,
+// eslint-disable-next-line max-len
+module.exports = async function sendEnvelope(providerId, formId, signerName, signerEmail, formFieldsEntries) {
+  // TODO - refactor to use passed orgId to retrieve org specific jsJwtAuth.accessToken from db,
   // if token has expired or doesn't exist,
   // use org specific dsConfig.js data from local db to create new token then store in db
   await dsJwtAuth.checkToken();
